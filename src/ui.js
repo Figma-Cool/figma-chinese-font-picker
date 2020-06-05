@@ -6,10 +6,7 @@ import $ from "jquery";
 let fontsCluster = null;
 let searchInput = $("#search");
 let fontRowDiv = [];
-let cleanedFontList = [];
 let searchResults = [];
-let detectIndex = 0;
-let detectLimit = 15;
 
 let keys = Object.keys(data);
 let searchValue = "";
@@ -49,7 +46,8 @@ $(document).on("click", ".font-row", function () {
 
 const isChiense = (family) => {
   family = family.split(" ")[0].toLowerCase();
-  return keys.some((key) => key.toLowerCase().includes(family));
+  return keys.map(key => key.toLowerCase()).indexOf(family) !== -1;
+  // return keys.some((key) => key.toLowerCase() === family);
 };
 
 const toChiense = (family) => {
@@ -75,10 +73,10 @@ const addFontRows = (fonts) => {
     if (fonts[i] && !family.startsWith(".")) {
       if (
         ((i > 0 && family !== fonts[i - 1].fontName.family) || i == 0) &&
-        isChiense(family)
+        isChiense(family) &&
+        detectFont(family)
       ) {
         let cnFamily = toChiense(family);
-        cleanedFontList.push(family);
         fontRowDiv.push(`
             <div class="font-row" data-content="${family}" style="font-family: '${family.toString()}', sans-serif">
               <p class="placeholder">文本示范</p>
@@ -92,17 +90,6 @@ const addFontRows = (fonts) => {
     }
   }
 
-  for (detectIndex; detectIndex < detectLimit; detectIndex++) {
-    if (!detectFont(cleanedFontList[detectIndex])) {
-      // console.log('-------------------------------------');
-      // console.log('removing: ', cleanedFontList[detectIndex]);
-      // console.log('-------------------------------------');
-      cleanedFontList.splice(detectIndex, 1);
-      fontRowDiv.splice(detectIndex, 1);
-      detectIndex--;
-    }
-  }
-
   fontsCluster = new Clusterize({
     rows: fontRowDiv,
     rows_in_block: 15,
@@ -110,31 +97,6 @@ const addFontRows = (fonts) => {
     scrollId: "fonts-scroll-area",
     contentId: "fonts-content-area",
     no_data_text: "No fonts found :(",
-    callbacks: {
-      clusterChanged: function () {
-        if (
-          detectIndex > cleanedFontList.length ||
-          searchInput.val().length > 0
-        ) {
-          return;
-        }
-        for (detectIndex; detectIndex < detectLimit; detectIndex++) {
-          if (
-            detectIndex < cleanedFontList.length &&
-            !detectFont(cleanedFontList[detectIndex])
-          ) {
-            // console.log('-------------------------------------');
-            // console.log('removing: ' + detectIndex +": " + cleanedFontList[detectIndex]);
-            // console.log('-------------------------------------');
-            cleanedFontList.splice(detectIndex, 1);
-            fontRowDiv.splice(detectIndex, 1);
-            detectIndex--;
-            fontsCluster.update(placeholder(fontRowDiv));
-          }
-        }
-        detectLimit += 15;
-      },
-    },
   });
 };
 
