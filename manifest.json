@@ -1,6 +1,6 @@
 {
-  "name": "Better Font Picker",
-  "id": "739922281164562258",
+  "name": "Chinese Font Picker",
+  "id": "850680004433247963",
   "api": "1.0.0",
   "ui": "dist/ui.html",
   "main": "dist/code.js"

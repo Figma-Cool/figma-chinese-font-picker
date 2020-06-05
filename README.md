@@ -1,11 +1,6 @@
-<img src="https://github.com/nitinrgupta/figma-font-preview/blob/develop/repo-assets/icon.png" alt="icon" height="50"></img>
-# figma-better-font-picker
+# chinese-font-picker
 
-A plugin to enable better font selections in Figma which previews how the font looks like.
-
-![](https://github.com/nitinrgupta/figma-font-preview/blob/develop/repo-assets/banner.png)
-
-
+figma 中文字体选择插件
 
 ## Development
 
@@ -17,11 +12,11 @@ npm i
 
 Run the plugin in dev mode
 ```
-npx webpack --mode=development --watch
+yarn start
 ```
 
 
 Build for production
 ```
-npx webpack --mode=production
+yarn build
 ```
