@@ -10,7 +10,7 @@ figma.ui.onmessage = (msg) => {
       })
       .catch((error) => {
         figma.notify(
-          "There was an error while loading the font :[  Please restart the plugin"
+          "加载失败，请重启插件"
         );
         console.log(error);
       });
@@ -24,7 +24,7 @@ figma.ui.onmessage = (msg) => {
     }
 
     if (figma.currentPage.selection.length === 0) {
-      figma.notify("Please select a text layer");
+      figma.notify("请先选择文本图层");
     }
   }
 };
