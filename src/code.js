@@ -1,4 +1,6 @@
 figma.showUI(__html__, { width: 300, height: 600 });
+figma.root.setRelaunchData({ open: "" });
+
 let fontList = [];
 figma.ui.onmessage = (msg) => {
   if (msg.type === "fetch-fonts") {
@@ -9,9 +11,7 @@ figma.ui.onmessage = (msg) => {
         figma.ui.postMessage({ data: fonts, type: "FONT_LOADED" });
       })
       .catch((error) => {
-        figma.notify(
-          "加载失败，请重启插件"
-        );
+        figma.notify("加载失败，请重启插件");
         console.log(error);
       });
   }
@@ -47,8 +47,11 @@ const loadFont = async (font, node) => {
   for (let index = 0; index < fontStyles.length; index++) {
     try {
       console.log("Trying font with " + font + " " + fontStyles[index]);
-      await figma.loadFontAsync({ family: `${font}`, style: fontStyles[index] });
-      node.fontName = { family: `${font}`, style: fontStyles[index] };
+      await figma.loadFontAsync({
+        family: font,
+        style: fontStyles[index],
+      });
+      node.fontName = { family: font, style: fontStyles[index] };
       index = fontStyles.length;
       console.log("Success!");
     } catch (error) {

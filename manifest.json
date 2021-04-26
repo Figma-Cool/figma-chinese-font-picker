@@ -3,5 +3,6 @@
   "id": "851126455550003999",
   "api": "1.0.0",
   "ui": "dist/ui.html",
-  "main": "dist/code.js"
+  "main": "dist/code.js",
+  "relaunchButtons": [{ "command": "open", "name": "Run Chinese Font Picker" }]
 }
