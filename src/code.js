@@ -47,8 +47,8 @@ const loadFont = async (font, node) => {
   for (let index = 0; index < fontStyles.length; index++) {
     try {
       console.log("Trying font with " + font + " " + fontStyles[index]);
-      await figma.loadFontAsync({ family: font, style: fontStyles[index] });
-      node.fontName = { family: font, style: fontStyles[index] };
+      await figma.loadFontAsync({ family: `${font}`, style: fontStyles[index] });
+      node.fontName = { family: `${font}`, style: fontStyles[index] };
       index = fontStyles.length;
       console.log("Success!");
     } catch (error) {

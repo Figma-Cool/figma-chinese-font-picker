@@ -50,7 +50,7 @@ const isChiense = (family) => {
   // return keys.some((key) => key.toLowerCase() === family);
 };
 
-const toChiense = (family) => {
+const toChinese = (family) => {
   family = family.split(" ");
   keys.forEach((key) => {
     let index = family.indexOf(key);
@@ -76,7 +76,7 @@ const addFontRows = (fonts) => {
         isChiense(family) &&
         detectFont(family)
       ) {
-        let cnFamily = toChiense(family);
+        let cnFamily = toChinese(family);
         fontRowDiv.push(`
             <div class="font-row" data-content="${family}" style="font-family: '${family.toString()}', sans-serif">
               <p class="placeholder">文本示范</p>
