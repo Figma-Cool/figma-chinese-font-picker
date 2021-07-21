@@ -1,10 +1,11 @@
 import "./ui.css";
 import data from "./data.json";
-import $ from "jquery";
+
+const Clusterize = require('./clusterize.min.js');
 
 // Global variable declarations
 let fontsCluster = null;
-let searchInput = $("#search");
+let searchInput = document.getElementById("search");
 let fontRowDiv = [];
 let searchResults = [];
 
@@ -12,10 +13,10 @@ let keys = Object.keys(data);
 let searchValue = "";
 
 // Fetching list of fonts from figma
-$(document).ready(() => {
+window.onload = function(){
   parent.postMessage({ pluginMessage: { type: "fetch-fonts" } }, "*");
   searchInput.focus();
-});
+}
 
 // Initing search cluster
 let searchCluster = new Clusterize({
@@ -39,9 +40,11 @@ onmessage = (event) => {
 };
 
 // On click listener for font rows
-$(document).on("click", ".font-row", function () {
-  const name = $(this).attr("data-content");
-  parent.postMessage({ pluginMessage: { type: "set-font", data: name } }, "*");
+document.body.addEventListener('click', function(e) {
+  if(e.target.className === 'font-row') {
+    const name = e.target.getAttribute('data-content');
+    parent.postMessage({ pluginMessage: { type: "set-font", data: name } }, "*");
+  }
 });
 
 const isChiense = (family) => {
@@ -105,35 +108,43 @@ let typingTimer;
 let doneTypingInterval = 500;
 
 // On keyup event listener
-searchInput.on("keyup", () => {
+searchInput.addEventListener("keyup", () => {
   clearTimeout(typingTimer);
   typingTimer = setTimeout(doneTyping, doneTypingInterval);
 });
 
 // After debounce function
 const doneTyping = () => {
-  searchValue = searchInput.val();
+  searchValue = searchInput.value;
+  const emptySearch = document.getElementById('empty-search');
+  const fontsScrollArea = document.getElementById('fonts-scroll-area');
+  const searchScrollArea = document.getElementById('search-scroll-area');
   if (searchValue.length > 2) {
     let searchResults = placeholder(fontRowDiv);
     searchCluster.update(searchResults);
-    $("#empty-search").hide();
-    $("#fonts-scroll-area").hide();
-    $("#search-scroll-area").show();
+    emptySearch.style.display = 'none';
+    fontsScrollArea.style.display = 'none';
+    searchScrollArea.style.display = 'block';
   }
   if (searchValue.length === 0) {
-    $("#fonts-scroll-area").show();
-    $("#empty-search").hide();
-    $("#empty-search").show();
+    fontsScrollArea.style.display = 'block';
+    emptySearch.style.display = 'none';
+    emptySearch.style.display = 'block';
   }
 };
 
-$("#clear-search").on("click", function (e) {
+const clearSearch = document.getElementById('clear-search');
+clearSearch.addEventListener('click', function (e) {
   searchValue = "";
   searchCluster.update(placeholder(fontRowDiv));
-  $("#empty-search").hide();
-  $("#search-scroll-area").hide();
-  $("#fonts-scroll-area").show();
-  $("#search").val("");
+  const search = document.getElementById('search');
+  const emptySearch = document.getElementById('empty-search');
+  const fontsScrollArea = document.getElementById('fonts-scroll-area');
+  const searchScrollArea = document.getElementById('search-scroll-area');
+  emptySearch.style.display = 'none';
+  searchScrollArea.style.display = 'none';
+  fontsScrollArea.style.display = 'block';
+  search.value = '';
 });
 
 /* Figma returns bunch of unnecessary/weird system fonts that don't render in browser.
