@@ -40,6 +40,9 @@ input:focus {
   cursor: pointer;
   padding: 7px 5px 7px 15px;
 }
+.font-row > p {
+  pointer-events: none;
+}
 .font-row:hover,
 .font-row:focus {
   background: #f3f3f3;
